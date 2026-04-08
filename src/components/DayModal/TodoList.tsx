@@ -11,6 +11,7 @@ interface TodoListProps {
 
 export default function TodoList({ todos, onTodosChange }: TodoListProps) {
   const [inputValue, setInputValue] = useState("");
+  const [recurrence, setRecurrence] = useState<TodoItemType["recurrence"]>("none");
 
   const handleAdd = () => {
     if (!inputValue.trim()) return;
@@ -19,12 +20,14 @@ export default function TodoList({ todos, onTodosChange }: TodoListProps) {
       id: crypto.randomUUID(),
       text: inputValue.trim(),
       completed: false,
+      recurrence,
       details: "",
       createdAt: new Date().toISOString(),
     };
     
     onTodosChange([...todos, newTodo]);
     setInputValue("");
+    setRecurrence("none");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -59,22 +62,38 @@ export default function TodoList({ todos, onTodosChange }: TodoListProps) {
         Action Items
       </h3>
 
-      <div className="flex items-center gap-2 mb-6 relative">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="New task..."
-          className="flex-1 bg-surface-hover/80 border border-white/10 rounded-xl py-3 px-4 pr-12 text-sm text-white placeholder:text-textSecondary/50 focus:outline-none focus:border-accent/50 focus:bg-surface-hover transition-all shadow-inner"
-        />
-        <button
-          onClick={handleAdd}
-          disabled={!inputValue.trim()}
-          className="absolute right-1.5 top-1.5 bottom-1.5 px-3 bg-accent hover:bg-accentHover disabled:bg-white/5 disabled:text-textSecondary/30 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center shadow-lg disabled:shadow-none"
-        >
-          <Plus className="w-4 h-4" />
-        </button>
+      <div className="mb-6">
+        <div className="flex items-center gap-2 relative">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="New task..."
+            className="flex-1 bg-surface-hover/80 border border-white/10 rounded-xl py-3 px-4 pr-12 text-sm text-white placeholder:text-textSecondary/50 focus:outline-none focus:border-accent/50 focus:bg-surface-hover transition-all shadow-inner"
+          />
+          <button
+            onClick={handleAdd}
+            disabled={!inputValue.trim()}
+            className="absolute right-1.5 top-1.5 bottom-1.5 px-3 bg-accent hover:bg-accentHover disabled:bg-white/5 disabled:text-textSecondary/30 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center shadow-lg disabled:shadow-none"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="mt-2 flex items-center justify-between">
+          <span className="text-[10px] uppercase tracking-widest text-textSecondary/70">Repeat</span>
+          <select
+            value={recurrence}
+            onChange={(e) => setRecurrence(e.target.value as TodoItemType["recurrence"])}
+            className="bg-surface-hover/90 border border-white/10 rounded-md px-2 py-1 text-[11px] text-textSecondary focus:outline-none focus:border-accent/50"
+            aria-label="Select recurrence"
+          >
+            <option value="none">No repeat</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
       </div>
 
       {todos.length === 0 ? (

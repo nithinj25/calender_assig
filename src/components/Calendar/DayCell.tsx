@@ -13,11 +13,11 @@ interface DayCellProps {
   onRangeSelect: (date: Date) => void;
 }
 
-const moodToEmoji = {
-  great: "🟢",
-  good: "🔵",
-  okay: "⚪",
-  bad: "🔴",
+const moodToLabel = {
+  great: "Great",
+  good: "Good",
+  okay: "Okay",
+  bad: "Bad",
 };
 
 const itemVariants = {
@@ -43,7 +43,7 @@ export default function DayCell({
       : false;
 
   const hasTodos = dayData?.todos && dayData.todos.length > 0;
-  const moodEmoji = dayData?.mood ? moodToEmoji[dayData.mood] : null;
+  const moodLabel = dayData?.mood ? moodToLabel[dayData.mood] : null;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -67,30 +67,34 @@ export default function DayCell({
       }}
       className={cn(
         "relative flex flex-col p-3 min-h-[90px] md:min-h-[110px] rounded-xl transition-all duration-300 outline-none group cursor-pointer overflow-hidden border",
-        isCurrentMonthFlag ? "bg-surface hover:bg-surface-hover backdrop-blur-md border-white/5" : "bg-transparent opacity-40 border-transparent",
-        isDateToday && "border-todayRing shadow-[0_0_15px_rgba(56,189,248,0.3)] bg-todayRing/10",
-        inRange && !isStart && !isEnd && "bg-rangeHighlight border-accent/20",
-        (isStart || isEnd) && "bg-accent/20 border-accent shadow-[0_0_20px_rgba(96,165,250,0.4)]"
+        isCurrentMonthFlag ? "bg-surface hover:bg-surface-hover backdrop-blur-md border-slate-200/70" : "bg-slate-100/55 border-slate-200/40",
+        isDateToday && "border-todayRing shadow-[0_0_15px_rgba(56,189,248,0.25)] bg-todayRing/10",
+        inRange && !isStart && !isEnd && "bg-[linear-gradient(180deg,rgba(59,130,246,0.12)_0%,rgba(59,130,246,0.08)_100%)] border-accent/20",
+        (isStart || isEnd) && "bg-[linear-gradient(180deg,rgba(59,130,246,0.26)_0%,rgba(59,130,246,0.16)_100%)] border-accent shadow-[0_0_20px_rgba(96,165,250,0.3)]",
+        "hover:border-accent/45 hover:shadow-[0_12px_26px_-20px_rgba(30,64,175,0.8)]"
       )}
     >
+      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_18%_14%,rgba(59,130,246,0.16)_0%,rgba(59,130,246,0)_58%)]" />
+      <div className="pointer-events-none absolute inset-x-3 top-0 h-[1px] bg-[linear-gradient(90deg,transparent,rgba(148,163,184,0.6),transparent)] opacity-70" />
       <div className="flex justify-between w-full items-start">
         <span
           className={cn(
-            "text-sm md:text-base font-semibold",
-            isDateToday ? "text-todayRing" : "text-white/90",
+            "text-sm md:text-base font-semibold relative z-10",
+            isCurrentMonthFlag ? "text-textPrimary" : "text-textSecondary",
+            isDateToday && "text-todayRing",
             (isStart || isEnd) && "text-accent font-bold"
           )}
         >
           {format(date, "d")}
         </span>
-        <div className="flex items-center gap-1.5">
-          {moodEmoji && <span className="text-[10px] text-shadow-sm drop-shadow-md">{moodEmoji}</span>}
+        <div className="flex items-center gap-1.5 relative z-10">
+          {moodLabel && <span className="text-[10px] font-medium text-textSecondary">{moodLabel}</span>}
           <button
             onClick={(e) => {
               e.stopPropagation();
               onDayClick(date);
             }}
-            className="opacity-0 group-hover:opacity-100 p-1.5 bg-white/10 hover:bg-accent/80 rounded-lg text-white backdrop-blur-sm transition-all focus:opacity-100 shadow-md"
+            className="opacity-0 group-hover:opacity-100 p-1.5 bg-white hover:bg-accent/10 rounded-lg text-textSecondary hover:text-accent border border-slate-200/80 transition-all focus:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 shadow-sm"
             aria-label="Open day notes"
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -101,13 +105,14 @@ export default function DayCell({
       <div className="flex-1 w-full pointer-events-none" />
 
       {hasTodos && (
-        <div className="flex gap-1 mt-auto">
+        <div className="flex items-center gap-1 mt-auto relative z-10">
           {dayData.todos.slice(0, 3).map((todo, i) => (
              <div key={i} className={cn("w-1.5 h-1.5 rounded-full shadow-[0_0_5px_currentColor]", todo.completed ? "bg-success text-success" : "bg-accent text-accent")} />
           ))}
           {dayData.todos.length > 3 && (
-            <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
+            <div className="w-1.5 h-1.5 rounded-full bg-slate-400/60" />
           )}
+          <span className="ml-1 text-[10px] font-medium text-textMuted">{dayData.todos.length}</span>
         </div>
       )}
     </motion.div>

@@ -3,6 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Trash2 } from "lucide-react";
 import { TodoItem as TodoItemType } from "@/types";
 
+const recurrenceLabel: Record<Exclude<TodoItemType["recurrence"], "none">, string> = {
+  daily: "Daily",
+  weekly: "Weekly",
+  monthly: "Monthly",
+};
+
 interface TodoItemProps {
   todo: TodoItemType;
   onToggle: (id: string) => void;
@@ -17,6 +23,7 @@ export default function TodoItem({
   onUpdateDetails,
 }: TodoItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const recurrence = todo.recurrence ?? "none";
 
   return (
     <motion.div
@@ -51,6 +58,11 @@ export default function TodoItem({
           >
             {todo.text}
           </span>
+          {recurrence !== "none" && (
+            <span className="ml-1 rounded-md border border-accent/25 bg-accent/10 px-2 py-0.5 text-[10px] uppercase tracking-wider text-accent">
+              {recurrenceLabel[recurrence]}
+            </span>
+          )}
         </label>
         
         <div className="flex items-center gap-1 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">

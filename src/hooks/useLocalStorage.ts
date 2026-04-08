@@ -14,14 +14,27 @@ export function useLocalStorage<T>(
     if (typeof window === "undefined") {
       return;
     }
+
+    let rafId: number | null = null;
+
     try {
       const item = window.localStorage.getItem(key);
       if (item) {
-        setStoredValue(JSON.parse(item));
+        const parsedValue = JSON.parse(item) as T;
+        // Schedule after paint to avoid synchronous setState in effect body.
+        rafId = window.requestAnimationFrame(() => {
+          setStoredValue(parsedValue);
+        });
       }
     } catch (error) {
       console.warn(`Error reading localStorage key "${key}":`, error);
     }
+
+    return () => {
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
   }, [key]);
 
   // Return a wrapped version of useState's setter function that

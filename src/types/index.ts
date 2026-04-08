@@ -4,6 +4,7 @@ export interface TodoItem {
   id: string;
   text: string;
   completed: boolean;
+  recurrence: 'none' | 'daily' | 'weekly' | 'monthly';
   details: string; // expanded accordion detail text
   createdAt: string;
 }

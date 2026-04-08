@@ -44,14 +44,17 @@ export default function CalendarGrid({
     <div className="w-full relative min-h-[400px]">
       <div className="grid grid-cols-7 mb-4">
         {WEEKDAYS.map((day, idx) => (
-          <div
+          <motion.div
             key={day}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.03, duration: 0.2 }}
             className={`text-center text-xs font-semibold tracking-widest text-textSecondary uppercase ${
-              idx === 0 || idx === 6 ? "text-accent/70" : ""
+              idx === 0 || idx === 6 ? "text-accent/80" : ""
             }`}
           >
             {day}
-          </div>
+          </motion.div>
         ))}
       </div>
 
@@ -68,7 +71,7 @@ export default function CalendarGrid({
           {leadingArray.map((_, i) => (
             <motion.div 
               key={`empty-${i}`} 
-              className="p-2 min-h-[90px] md:min-h-[110px] rounded-xl bg-surface/20 border border-white/5" 
+              className="p-2 min-h-[90px] md:min-h-[110px] rounded-xl bg-slate-100/55 border border-slate-200/50" 
             />
           ))}
 

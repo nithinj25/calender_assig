@@ -1,19 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background-start: #eaeaea;
-  --color-background-end: #d6d6d6;
+  --color-background-start: #f8fafc;
+  --color-background-end: #eef2f7;
   --color-surface: #ffffff;
-  --color-surface-hover: #f9f9f9;
+  --color-surface-hover: #f4f7fb;
   --color-surface2: #f3f4f6;
   --color-accent: #3b82f6; /* Modern Blue to match the provided mockup */
   --color-accentHover: #2563eb;
   --color-textPrimary: #1e293b;
   --color-textSecondary: #64748b;
+  --color-textMuted: #94a3b8;
   --color-rangeHighlight: rgba(59, 130, 246, 0.1);
   --color-todayRing: #ef4444; /* Keep today red for visibility */
   --color-success: #10b981;
   --color-border: #e2e8f0;
+  --color-heroWash: rgba(255, 255, 255, 0.72);
+  --color-heroInk: #0f172a;
 
   --font-sans: var(--font-inter), var(--font-outfit), sans-serif;
   --font-serif: var(--font-playfair), serif;
