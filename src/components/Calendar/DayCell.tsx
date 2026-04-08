@@ -1,5 +1,5 @@
 import { format, isBefore, isAfter } from "date-fns";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { DayData, DateRange } from "@/types";
 import { isToday, isSame } from "@/utils/dateHelpers";
 import { cn } from "@/utils/cn";
@@ -20,9 +20,14 @@ const moodToLabel = {
   bad: "Bad",
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, scale: 0.9, y: 10 },
-  show: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 300, damping: 24 },
+  },
 };
 
 export default function DayCell({
